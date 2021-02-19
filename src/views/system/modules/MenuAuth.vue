@@ -6,8 +6,8 @@
       <a-form layout="inline">
         <a-row :gutter="10">
           <a-col :md="10" :sm="12">
-            <a-form-item label="服务名" style="margin-left:8px">
-              <a-input placeholder="请输入服务名" v-model="queryParam.serviceName"></a-input>
+            <a-form-item label="APi路径" style="margin-left:8px">
+              <a-input placeholder="请输入路径" v-model="queryParam.apiPath"></a-input>
             </a-form-item>
           </a-col>
           <!--<a-col :md="8" :sm="8">-->

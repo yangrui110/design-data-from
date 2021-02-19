@@ -2,14 +2,15 @@
   <div :class="wrpCls">
     <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" @showUp = "updatePassword"/>
     <select-lang :class="prefixCls" />
-    <user-password ref="userPassword"></user-password>
+    <user-password :class="prefixCls" ref="userPassword"></user-password>
   </div>
 </template>
 
 <script>
 import AvatarDropdown from './AvatarDropdown'
 import SelectLang from '@/components/SelectLang'
-import store from '@/store/'
+import store from 'store'
+import {USER_INFO } from '@/store/mutation-types'
 // import UserPassword from './UserPassword'
 const UserPassword = ()=>import("./UserPassword")
 export default {
@@ -53,10 +54,11 @@ export default {
   },
   mounted () {
     setTimeout(() => {
+      var name = store.get(USER_INFO).userName
       this.currentUser = {
-        name: store.getters.userInfo.userName
+        name: name
       }
-    }, 1500)
+    }, 3000)
   },
   methods:{
     updatePassword(){

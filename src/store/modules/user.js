@@ -1,6 +1,6 @@
 import storage from 'store'
 import { login, getInfo, logout } from '@/api/login'
-import { ACCESS_TOKEN } from '@/store/mutation-types'
+import { ACCESS_TOKEN,USER_INFO } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
 const user = {
@@ -80,7 +80,7 @@ const user = {
           commit('SET_INFO', result)
           commit('SET_NAME', { name: result.name, welcome: welcome() })
           commit('SET_AVATAR', result.avatar)
-
+          storage.set(USER_INFO, result)
           resolve(response)
         }).catch(error => {
           console.log('错误信息：', error)
@@ -96,6 +96,7 @@ const user = {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
           storage.remove(ACCESS_TOKEN)
+          storage.remove(USER_INFO)
           resolve()
         }).catch(() => {
           resolve()

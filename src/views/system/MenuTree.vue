@@ -16,7 +16,7 @@
               <a v-if="this.currSelected.title" style="margin-left: 10px" @click="onClearSelected">取消选择</a>
             </div>
           </a-alert>
-          <a-input-search @search="onSearch" style="width:100%;margin-top: 10px" placeholder="请输入部门名称"/>
+          <a-input-search @search="onSearch" style="width:100%;margin-top: 10px" placeholder="请输入菜单名称"/>
           <!-- 树-->
           <a-col :md="10" :sm="24">
             <template>
@@ -124,7 +124,7 @@
           </a-card>
         </a-tab-pane>
         <a-tab-pane tab="菜单按钮" key="2" forceRender>
-          <dept-user-info ref="deptUserInfo"/>
+          <menu-button ref="menuButton"/>
         </a-tab-pane>
         <a-tab-pane tab="菜单接口" key="3" forceRender>
           <menu-auth ref="menuAuth"/>
@@ -132,17 +132,17 @@
       </a-tabs>
 
     </a-col>
-    <depart-modal ref="departModal" @ok="loadTree"></depart-modal>
+    <menu-modal ref="departModal" @ok="loadTree"></menu-modal>
   </a-row>
 </template>
 <script>
-  import DepartModal from './modules/DepartModal'
+  import MenuModal from './modules/MenuModal'
   import pick from 'lodash.pick'
   import {queryDepartTreeList, searchByKeywords, deleteByDepartId} from '@/api/api'
   import {postAction, deleteAction} from '@/api/manage'
   import {JeecgListMixin} from '@/mixins/JeecgListMixin'
   import MenuAuth from './modules/MenuAuth'
-  import DeptUserInfo from './modules/DeptUserInfo'
+  import MenuButton from './modules/MenuButton'
   import { listToTree } from '@/router/generator-routers'
   
   export default {
@@ -150,8 +150,8 @@
     mixins: [JeecgListMixin],
     components: {
       MenuAuth,
-      DepartModal,
-      DeptUserInfo
+      MenuModal,
+      MenuButton
     },
     data() {
       return {
@@ -317,11 +317,12 @@
       onSearch(value) {
         let that = this
         if (value) {
-          searchByKeywords({keyWord: value}).then((res) => {
-            if (res.success) {
+          queryDepartTreeList({keyWord: value}).then((res) => {
+            if (res.code === 200) {
               that.departTree = []
-              for (let i = 0; i < res.result.length; i++) {
-                let temp = res.result[i]
+              for (let i = 0; i < res.data.length; i++) {
+                let temp = res.data[i]
+                temp.value = temp.id
                 that.departTree.push(temp)
               }
             } else {
@@ -365,7 +366,7 @@
         this.model.parentId = record.parentId
         this.setValuesToForm(record)
         this.$refs.menuAuth.open(record);
-        this.$refs.deptUserInfo.open(record)
+        this.$refs.menuButton.open(record)
 
       },
       // 触发onSelect事件时,为部门树右侧的form表单赋值

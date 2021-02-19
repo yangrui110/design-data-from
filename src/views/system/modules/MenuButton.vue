@@ -81,7 +81,7 @@
   import {getAction, postAction, deleteAction} from '@/api/manage'
   import MenuButtonModal from './MenuButtonModal'
   export default {
-    name: "DeptUserInfo",
+    name: "MenuButton",
     mixins: [JeecgListMixin],
     components: {
       MenuButtonModal
